@@ -1,0 +1,25 @@
+Package: lvgpp
+Type: Package
+Title: Latent variable Gaussian process prediction
+Version: 0.1
+Date: 2015-11-20
+Author: Simon Dirmeier
+Maintainer: Simon Dirmeier, <simon.dirmeier@digital-alexandria.net>
+Description: Predict non-linear dependencies using Gaussian processes. Blabla
+License: GPL-3
+Encoding: UTF-8
+Collate:
+    'approx.R'
+    'classes.R'
+    'demo.R'
+    'kernels.R'
+    'lvgpp.R'
+    'predict.R'
+    'sampler.R'
+    'transfer_functions.R'
+Suggests:
+    knitr,
+    rmarkdown
+Imports:
+    pracma
+RoxygenNote: 5.0.1
