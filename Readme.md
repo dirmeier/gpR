@@ -1,7 +1,7 @@
 lvgpp
 ======
 
-An R-library for supervised machine learning using Gaussian processes.
+An R-library for supervised learning using Gaussian processes.
 
 ## Installation
  
