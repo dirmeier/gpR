@@ -1,0 +1,103 @@
+---
+title: "lvgpp"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lvgpp}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+## Introduction
+
+`lvgpp` is a Bayesian machine learning package using latent variable Gaussian processes. In general supervised machine learning can be divided in classification, where we describe data using discrete labels, and regression, where the labels are continuous. 
+
+Prediction using `lvgpp` utilizes similarity of observations in order to make predictions. Simply speaking regression is done by calculating the kernel between observations and then sampling from a Gaussian process using the kernel as covariance matrix (and optionally a mean function, but mostly we can set this to zero). In the classification case a similar procedure is applied. The main difference is here that we are dealing with a non-Gaussian likelihood and thus the posterior has to be approximated (e.g. using the Laplace approximation). With the approximative posterior we can assign a label to an observation by <it>squashing</it> a sample from the posterior through a logit/probit function.
+
+In the following section we briefly describe how `lvgpp` can be used.
+
+## Tutorial
+
+First load the package:
+```{r}
+library(lvgpp)
+```
+
+In order to get a quick overview of how regression or binary classification works, just type:
+```{r, eval=F}
+lvgpp::demo.regression()
+lvgpp::demo.bin.classification()
+```
+
+### Regression
+
+First create some training samples (or use existing ones):
+```{r}
+ x.train <- seq(-5, 5, .1)
+ y.train <- rnorm(length(x.train))
+```
+ 
+Then create new input points for which a prediction should be made:
+```{r}
+ x.new <- rnorm(100)
+```
+
+In order to use `lvgpp` we have to set kernel (so far only the gamma.exponential is available :( ) and kernel parameter:
+```{r} 
+ pars <- list(var=1, inv.scale=2, gamma=2, noise=.1, kernel="gamma.exp")
+```
+
+Make the prediction for `x.new`:
+```{r}
+ pred <- lvgpr(x.train, y.train, x.new, pars)
+```
+
+Plot the results:
+```{r, fig.width=6}
+ plot(x.train, y.train, type="l", xlab="X", ylab="Y")
+ points(x.new, pred$y.predict, col="blue")
+```
+
+### Classification
+
+At first we create some training and testing data:
+```{r}
+ x.train <- seq(-5, 5, .1)
+ c.train <- c(rep(0,25), rep(1, length(x.train)-50), rep(0,25))
+ x.new <- rnorm(100, 0, 2)
+```
+
+Then we set the kernel:
+```{r}
+ pars <- list(var=1, inv.scale=2, gamma=2, noise=.1, kernel="gamma.exp")
+```
+
+Finally we make the prediction and plot the results:
+```{r, , fig.width=6}
+ pred <- lvgpp::lvgpc(x.train, c.train, x.new, pars)
+ plot(x.train, c.train, type="l", xlab="X", ylab="C")
+ points(x.new, pred$c.label, col="blue")
+``` 
+ 
+### Various functions
+
+`lvgpp` offers several utility functions.
+
+#### Covariance function
+
+If you want to calculate the gram-matrix of a data vector use:
+```{r}
+ x <- rnorm(10)
+ K <- covariance.function(x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
+ K[1:5, 1:5]
+```
+
+#### Gaussian process samplers
+
+You can sample from a GP directly using:
+```{r}
+ x = seq(-10, 10, .25)
+ m = rep(0, length(x))
+ K = covariance.function(x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
+ sample.from.gp(x, m, K)[1:5]
+```

@@ -95,7 +95,8 @@ function(x.train=NULL, c.train=NULL, x.new=NULL,
     obj <- list(mean.c.predict=pred.posterior$mean.c.predict,
                 c.predict=pred.posterior$c.predict,
                 cov=pred.posterior$cov,
-                mean=pred.posterior$mean)
+                mean=pred.posterior$mean,
+                c.label=pred.posterior$c.labels)
     # add function call to object
     obj$call <- match.call()
     # cast to class "lvgpc.pred"

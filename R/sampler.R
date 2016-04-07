@@ -37,7 +37,6 @@ sample.gaussian <- function(m, var) m + var * rnorm(1)
 
 #' Sample class label probabilities from a logistic mapping of a Gaussian process
 #'
-#' @export
 #' @param x  a vector of real values
 #' @param m  a vector of mean values, e.g. a vector of zeroes
 #' @param K  a symmetric positive semi-definite matrix of size \code{length(x)} x \code{length(x)}, e.g. calculated using \code{convariance.function}
@@ -51,8 +50,8 @@ sample.from.sigmoid.gp <-
 function(x=seq(-10, 10, .25),m=NULL, K=NULL)
 {
   xlen <- length(x)
-  if (is.null(m)) m <- rep(0)
+  if (is.null(m)) m <- rep(0, xlen)
   if (is.null(K)) K <- covariance.function(x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
   y.latent <- sample.from.gp(x, m, K)
-  sigmoid(y.latent)
+  y <- sigmoid(y.latent)
 }

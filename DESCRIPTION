@@ -23,3 +23,4 @@ Suggests:
 Imports:
     pracma
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr

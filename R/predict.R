@@ -95,8 +95,11 @@ function(object, ...)
   }
   m.new <- K[test, train] %*% c.mean
   cov.new.new <- K[test, test] - K[test, train] %*% solve(cov.train.train + Dinv) %*% K[train, test]
+  c.labels <- rep(0, length(pred.samples))
+  c.labels[pred.samples >= 0.5] <- 1
   obj <- list(mean.c.predict=pred.means,
               c.predict=pred.samples,
+              c.labels = c.labels,
               cov=cov.new.new,
               mean=m.new)
   obj$call <- match.call()
