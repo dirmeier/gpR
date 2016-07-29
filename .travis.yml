@@ -1,0 +1,14 @@
+language: r
+
+r:
+  - oldrel
+  - release
+  - devel
+
+env:
+  global:
+    - R_BUILD_ARGS="--no-build-vignettes --no-manual"
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
+
+after_success:
+  - R -e 'covr::codecov()'
