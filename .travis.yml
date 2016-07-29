@@ -11,4 +11,4 @@ env:
     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
 
 after_success:
-  - R -e 'covr::codecov()'
+  - bash <(curl -s https://codecov.io/bash)
