@@ -5,10 +5,13 @@ r:
   - release
   - devel
 
+r_packages:
+  - covr
+
 env:
   global:
     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - R -e 'covr::codecov()'

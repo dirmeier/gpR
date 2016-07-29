@@ -109,4 +109,4 @@ function(x.train=NULL, c.train=NULL, x.new=NULL,
     # cast to class "lvgpc.pred"
     class(obj) <- "lvgpc.pred"
     obj
-  }
+}
