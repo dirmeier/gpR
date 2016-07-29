@@ -25,6 +25,9 @@ an object of class \code{lvgpr.pred}
 \item{cov  }{ the posterior covariance/kernel}
 \item{call  }{ the function call}
 }
+\description{
+Prediction of normal-distributed random variables using GP regression
+}
 \examples{
  x.train <- seq(-5, 5, .1)
  y.train <- rnorm(length(x.train))

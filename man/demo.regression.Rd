@@ -9,4 +9,7 @@ demo.regression()
 \description{
 Run a GPR example. Generate samples using the prior GP, then learn the posterior GP and predict a new set of data points.
 }
+\examples{
+ demo.regression()
+}
 

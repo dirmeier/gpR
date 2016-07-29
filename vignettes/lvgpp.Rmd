@@ -42,7 +42,7 @@ Then create new input points for which a prediction should be made:
  x.new <- rnorm(100)
 ```
 
-In order to use `lvgpp` we have to set kernel (so far only the gamma.exponential is available :( ) and kernel parameter:
+In order to use `lvgpp` we have to set kernel (so far only the gamma.exponential is available) and kernel parameter:
 ```{r} 
  pars <- list(var=1, inv.scale=2, gamma=2, noise=.1, kernel="gamma.exp")
 ```
@@ -79,25 +79,3 @@ Finally we make the prediction and plot the results:
  points(x.new, pred$c.label, col="blue")
 ``` 
  
-### Various functions
-
-`lvgpp` offers several utility functions.
-
-#### Covariance function
-
-If you want to calculate the gram-matrix of a data vector use:
-```{r}
- x <- rnorm(10)
- K <- covariance.function(x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
- K[1:5, 1:5]
-```
-
-#### Gaussian process samplers
-
-You can sample from a GP directly using:
-```{r}
- x = seq(-10, 10, .25)
- m = rep(0, length(x))
- K = covariance.function(x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
- sample.from.gp(x, m, K)[1:5]
-```

@@ -12,61 +12,71 @@
 #'  \url{http://www.gaussianprocess.org/gpml/} \cr \cr
 #'  Barber D. (2015), \emph{Bayesian Reasoning and Machine Learning}, Cambridge University Press \cr
 #'  \url{http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.Online}
-approx.posterior <-
-function(object)
+setGeneric("approx.posterior", function(obj, ...) standardGeneric("approx.posterior"))
+
+#' @noRd
+setMethod("approx.posterior", signature(obj = "lvgpc.data"), function(obj, ...) {
+  .approx.posterior(obj, ...)
+})
+
+#' @noRd
+.approx.posterior <-
+function(obj, ...)
 {
-  if (class(object) != "lvgpc") stop("Please provide an lvgpc object!")
-  x.train <- object$x.train
-  c.train <- object$c.train
-  x.new   <- object$x.new
-  x <- c(x.train, x.new)
-  # kernel hyperparameters and kernel function (i.e. the covariance)
-  pars <- object$pars
-  n <- length(x.train)
-  train <- 1:n
-  test <- 1:length(x.new) + n
-  # create the covariance
-  K <- covariance.function(x1=x, x2=x, pars=pars)
-  diagn <- diag(n)
-  # posterior and logistic transform values (estimated in next lines)
-  y <- sig <- rep(0, n)
-  # Hessian of log-likelihood (estimated in the next lines)
-  D <- diag(sig)
-  # covariance of training points
-  K.train <- K[train, train]
-  y.old <- Inf
-  niter <- 1000
-  iter <- 1
-  # estimate the mean of the posterior
-  # since in a Gaussian distribution the mean equals the mode, we can apply a Laplace approximation :) (see references: Barber p577, Section~2.82)
-  # the update is done using Newton's method, where y.new = y.old - (\nabla \nabla \Psi)^{-1} \nabla \Psi (see references: Barber p405, Equation~19.5.14; Rasmussen p43, Equation~3.18)
-  # \Psi is the unnormalized log posterior GP = log p(y|f) + log(f)
-  while (mean(abs(y - y.old)) > 10e-5 && iter <= niter)
-  {
-    # compute class mapping for y
-    sig <- as.vector(sigmoid(y))
-    # compute Hessian of log-likelihood (ONLY IN THIS CASE WHERE THE LOG-TRANSFORM IS USED!)
-    D <- diag(sig*(1-sig))
-    y.old <- y
-    # compute Newton update (see references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18)
-    y <- as.vector(K.train %*% solve(diagn + D %*% K.train) %*% (D%*%y + c.train  - sig))
-    iter <- iter + 1
+    x.train <- obj@x.train
+    c.train <- obj@c.train
+    x.new   <- obj@x.new
+    x <- c(x.train, x.new)
+    # kernel hyperparameters and kernel function (i.e. the covariance)
+    pars <- obj@pars
+    n <- base::length(x.train)
+    train <- 1:n
+    # create the covariance
+    K <- covariance.function(x1=x, x2=x, pars=pars)
+    diagn <- diag(n)
+    # posterior and logistic transform values (estimated in next lines)
+    y <- sig <- rep(0, n)
+    # Hessian of log-likelihood (estimated in the next lines)
+    D <- base::diag(sig)
+    # covariance of training points
+    K.train <- K[train, train]
+    y.old <- Inf
+    niter <- 1000
+    iter <- 1
+    # estimate the mean of the posterior
+    # since in a Gaussian distribution the mean equals the mode, we can apply a Laplace approximation :) (see references: Barber p577, Section~2.82)
+    # the update is done using Newton's method, where y.new = y.old - (\nabla \nabla \Psi)^{-1} \nabla \Psi (see references: Barber p405, Equation~19.5.14; Rasmussen p43, Equation~3.18)
+    # \Psi is the unnormalized log posterior GP = log p(y|f) + log(f)
+    while (base::mean(base::abs(y - y.old)) > 10e-5 && iter <= niter)
+    {
+      # compute class mapping for y
+      sig <- base::as.vector(sigmoid(y))
+      # compute Hessian of log-likelihood (ONLY IN THIS CASE WHERE THE LOG-TRANSFORM IS USED!)
+      D <- base::diag(sig*(1-sig))
+      y.old <- y
+      # compute Newton update (see references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18)
+      y <- base::as.vector(K.train %*%
+                             base::solve(diagn + D %*% K.train) %*%
+                             (D%*%y + c.train  - sig))
+      iter <- iter + 1
+    }
+    list(map=y,             # mode/mean/map-estimator of posterior
+         log.transform=sig, # map class-label prediction
+         cov=K,             # joint covariance matrix
+         D=D)               # Hessian of log-likelihood
   }
-  list(map=y,             # mode/mean/map-estimator of posterior
-       log.transform=sig, # map class-label prediction
-       cov=K,             # joint covariance matrix
-       D=D)               # Hessian of log-likelihood
-}
 
 #' Approximation of logistic-normal integral using the error function
 #'
-#' @import pracma
 #' @noRd
+#' @import pracma
 #' @references
 #'  \url{http://threeplusone.com/Crooks-LogisticNormal.pdf}
-logistic.normal.integral <-
+#'  @examples
+#'  .logistic.normal.integral(0, 1)
+.logistic.normal.integral <-
 function(m, sig)
 {
-  lam <- sqrt(pi)/4
-  0.5 + 0.5 * pracma::erf(lam * m / sqrt(1 + 2*lam**2*sig))
+  lam <- base::sqrt(pi)/4
+  0.5 + 0.5 * pracma::erf(lam * m / base::sqrt(1 + 2*lam**2*sig))
 }

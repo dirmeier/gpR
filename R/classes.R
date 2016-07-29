@@ -1,21 +1,19 @@
-#' @title Description for class \code{lvgpr}
+#' Data wrapper for Gausian process regression
 #'
 #' @noRd
-new.lvgpr.obj <-
-function(x.train, y.train, x.new, pars)
-{
-    obj <- list(x.train=x.train, y.train=y.train, x.new=x.new, pars=pars)
-    class(obj) <- "lvgpr"
-    obj
-}
+setClass(
+  "lvgpr.data",
+  representation(x.train="numeric", y.train="numeric",x.new="numeric", pars="list"),
+  validity=function(object)length(object@x.train) == length(object@y.train)
+)
 
-#' @title Description for class \code{lvgpc}
+#' Data wrapper for Gausian process classification
 #'
 #' @noRd
-new.lvgpc.obj <-
-function(x.train, c.train, x.new, pars)
-{
-  obj <- list(x.train=x.train, c.train=c.train, x.new=x.new, pars=pars)
-  class(obj) <- "lvgpc"
-  obj
-}
+setClass(
+  "lvgpc.data",
+  representation(x.train="numeric", c.train="numeric",x.new="numeric", pars="list"),
+  validity=function(object) all(object@c.train %in% c(0,1)) &
+    (length(object@x.train) == length(object@c.train))
+)
+

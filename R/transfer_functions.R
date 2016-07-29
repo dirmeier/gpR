@@ -1,5 +1,6 @@
 #' @title Logistic transfer-function
 #'
 #' @noRd
-sigmoid <-
-function(x) (1 / (1+exp(-x)))
+#' @examples
+#'  .sigmoid(1)
+.sigmoid <- function(x) (1 / (1+base::exp(-x)))

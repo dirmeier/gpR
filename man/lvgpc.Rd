@@ -29,7 +29,7 @@ an \code{lvgpc.pred} object
 \item{call  }{ the function call}
 }
 \description{
-hier evtl wie das geht und welche threshold func ich nehm
+Prediction of binomial-distributed random variables using GP classification
 }
 \examples{
  x.train <- seq(-5, 5, .1)
