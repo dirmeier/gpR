@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/rafstraumur/lvgpp.svg?branch=master)](https://travis-ci.org/rafstraumur/lvgpp.svg?branch=master)
 [![codecov](https://codecov.io/gh/rafstraumur/lvgpp/branch/master/graph/badge.svg)](https://codecov.io/gh/rafstraumur/lvgpp)
 
-
 An R-library for supervised learning using Gaussian processes.
 
 ## Introduction
