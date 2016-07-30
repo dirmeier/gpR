@@ -8,7 +8,7 @@ Gaussian processes for machine learning in R.
 
 ## Introduction
 
-Gaussian Processes have recently gained a lot of attention in machine learning. Since I am fan of prediction using GPs as well I'll introduce the theory roughly. The package <code>lvgpp</code> show how training (calculation of the posterior predictive) and prediction is done when the kernel parameters are known. In the next versions I will also implement how those are calculated by optimizing marginal likelihood and probably include more kernels.
+Gaussian Processes have recently gained a lot of attention in machine learning. Since I am fan of prediction using GPs as well I'll introduce the theory roughly. The package <code>lvgpp</code> shows how training (calculation of the posterior predictive) and prediction is done when the kernel parameters are known. In the next versions I will also implement how those are calculated by optimizing marginal likelihood and probably include more kernels.
 
 ## Installation
  
