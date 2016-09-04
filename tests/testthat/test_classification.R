@@ -1,5 +1,3 @@
-library(lvgpp)
-
 context("classification")
 
 test_that("classification predicts correctly", {

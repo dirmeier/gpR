@@ -1,5 +1,3 @@
-library(lvgpp)
-
 context("regression")
 
 test_that("regression predicts correctly", {
