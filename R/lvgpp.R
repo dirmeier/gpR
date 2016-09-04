@@ -90,7 +90,8 @@ function(x.train=NULL, y.train=NULL, x.new=NULL,
 #' @importFrom methods new
 lvgpc.default <-
 function(x.train=NULL, c.train=NULL, x.new=NULL,
-         pars=list(var=1, inv.scale=2, gamma=2, noise=.1, kernel="gamma.exp"), ...)
+         pars=list(var=1, inv.scale=2, gamma=2, noise=.1,
+                   kernel="gamma.exp"), ...)
 {
     # create an classification object
     lvgpc.obj <-  methods::new("lvgpc.data",
@@ -100,10 +101,10 @@ function(x.train=NULL, c.train=NULL, x.new=NULL,
     # and class mapping probabilities (i.e. the probability that c.new=1)
     pred.posterior <- predict(lvgpc.obj, ...)
     obj <- base::list(mean.c.predict=pred.posterior$mean.c.predict,
-                c.predict=pred.posterior$c.predict,
-                cov=pred.posterior$cov,
-                mean=pred.posterior$mean,
-                c.label=pred.posterior$c.labels)
+                      c.predict=pred.posterior$c.predict,
+                      cov=pred.posterior$cov,
+                      mean=pred.posterior$mean,
+                      c.label=pred.posterior$c.labels)
     # add function call to object
     obj$call <- match.call()
     # cast to class "lvgpc.pred"
