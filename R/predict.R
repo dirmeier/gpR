@@ -41,7 +41,8 @@ function(obj, ...)
   # posterior mean value (see references: Barber p396, Equation~19.2.5; Rasmussen p16, Equation~2.23)
   m <- cov.new.train %*% cov.inv.train.train %*% y.train
   # posterior covariance of new inputs (see references: Barber p396, Equation~19.2.5; Rasmussen p16, Equation~2.24)
-  cov.new.new <- covariance.function(x1=x.new, x2=x.new, pars=pars) - cov.new.train %*% cov.inv.train.train %*% t(cov.new.train)
+  cov.new.new <- covariance.function(x1=x.new, x2=x.new, pars=pars) -
+    cov.new.train %*% cov.inv.train.train %*% t(cov.new.train)
   # sample from the posterior Gaussian process to get y*
   y   <- sample.from.gp(x=x.new, m=m, K=cov.new.new)
   ret <- base::list(y.predict=y,cov=cov.new.new, mean=m)

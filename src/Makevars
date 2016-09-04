@@ -1,0 +1,1 @@
+PKG_FCFLAGS=-std=f2008 -fdefault-real-8

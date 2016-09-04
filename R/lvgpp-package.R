@@ -1,4 +1,4 @@
-#' Package: lvgpp
+#' lvgpp
 #'
 #' \emph{lvgpp} is a Bayesian machine learning package using latent Gaussian processes.
 #' In general supervised machine learning can be divided in classification,
@@ -6,6 +6,8 @@
 #'
 #' @name lvgpp-package
 #' @author Simon Dirmeier | \email{simon.dirmeier@@gmx.de}
+#'
 #' @docType package
 #' @keywords package
+#' @useDynLib lvgpp
 NULL
