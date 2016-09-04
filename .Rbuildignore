@@ -1,2 +1,13 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.gitignore
+.git
+.idea
+test
+lvgpp.Rcheck
+lvgpp.Rproj
+lvgpp*tar.gz
+.build*timestamp
+VERSIONS.md
+LICENSE
+.travis.yml

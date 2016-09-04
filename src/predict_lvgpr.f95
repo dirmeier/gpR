@@ -13,7 +13,6 @@
       b = 0.0
       bold = 1.0      
       do while (sum(abs(b-bold)) > 0.001)      
-       print *, b, " -> ",  bold 
        bold = b
        do i = 1, p
         betaIdxMin = pack(EXL, EXL /= i)        
