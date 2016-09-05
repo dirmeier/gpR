@@ -6,8 +6,7 @@
 #' @param x2  a vector of random real numbers
 #' @param pars  a list containing hyperparameters and kernel specification
 #' @return the calculated kernel/covariance matrix of size (\code{length(x1)} x \code{length(x2)})
-covariance.function <-
-function(x1, x2, pars)
+covariance.function <- function(x1, x2, pars)
 {
   fun <-  switch(pars$kernel, gamma.exp = .gamma.exp, NULL)
   if (base::is.null(fun))

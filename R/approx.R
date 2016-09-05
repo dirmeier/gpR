@@ -44,7 +44,9 @@ function(obj, ...)
     niter <- 1000
     iter <- 1
     # estimate the mean of the posterior
-    # since in a Gaussian distribution the mean equals the mode, we can apply a Laplace approximation :) (see references: Barber p577, Section~2.82)
+    # since in a Gaussian distribution the mean equals the mode,
+    # we can apply a Laplace approximation.
+    # (see references: Barber p577, Section~2.82)
     # the update is done using Newton's method, where y.new = y.old - (\nabla \nabla \Psi)^{-1} \nabla \Psi (see references: Barber p405, Equation~19.5.14; Rasmussen p43, Equation~3.18)
     # \Psi is the unnormalized log posterior GP = log p(y|f) + log(f)
     while (base::mean(base::abs(y - y.old)) > 10e-5 && iter <= niter)
@@ -54,7 +56,8 @@ function(obj, ...)
       # compute Hessian of log-likelihood (ONLY IN THIS CASE WHERE THE LOG-TRANSFORM IS USED!)
       D <- base::diag(sig*(1-sig))
       y.old <- y
-      # compute Newton update (see references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18)
+      # compute Newton update
+      #  (see references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18)
       y <- base::as.vector(K.train %*%
                              base::solve(diagn + D %*% K.train) %*%
                              (D%*%y + c.train  - sig))
