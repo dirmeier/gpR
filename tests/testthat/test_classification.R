@@ -1,5 +1,3 @@
-library(gpR)
-
 context("classification")
 
 test_that("classification predicts correctly", {
