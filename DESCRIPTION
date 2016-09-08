@@ -1,11 +1,11 @@
-Package: lvgpp
+Package: gpR
 Type: Package
-Title: Latent variable Gaussian process prediction
+Title: Gaussian processes in R
 Version: 0.1
 Date: 2015-11-20
 Author: Simon Dirmeier
 Maintainer: Simon Dirmeier, <simon.dirmeier@gmx.de>
-Description: lvgpp is a Bayesian machine learning package using latent Gaussian processes.
+Description: gpR is a Bayesian machine learning package using latent Gaussian processes.
   In general supervised machine learning can be divided in classification,
   where we describe data using discrete labels, and regression, where the labels are continuous.
 License: GPL-3
@@ -13,7 +13,8 @@ Encoding: UTF-8
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    lintr
 Imports:
     pracma,
     methods

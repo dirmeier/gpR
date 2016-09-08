@@ -1,4 +1,4 @@
 library(testthat)
-library(lvgpp)
+library(gpR)
 
-test_check("lvgpp")
+test_check("gpR")

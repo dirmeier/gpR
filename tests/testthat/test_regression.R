@@ -1,4 +1,4 @@
-library(lvgpp)
+library(gpR)
 
 context("regression")
 
