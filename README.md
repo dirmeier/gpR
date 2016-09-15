@@ -1,29 +1,29 @@
-<h1 align="center"> lvgpp </h1>
+<h1 align="center"> gpR </h1>
 
-[![Build Status](https://travis-ci.org/rafstraumur/lvgpp.svg?branch=master)](https://travis-ci.org/rafstraumur/lvgpp.svg?branch=master)
-[![codecov](https://codecov.io/gh/rafstraumur/lvgpp/branch/master/graph/badge.svg)](https://codecov.io/gh/rafstraumur/lvgpp)
+[![Build Status](https://travis-ci.org/dirmeier/gpR.svg?branch=master)](https://travis-ci.org/dirmeier/gpR.svg?branch=master)
+[![codecov](https://codecov.io/gh/dirmeier/gpR/branch/master/graph/badge.svg)](https://codecov.io/gh/dirmeier/gpR)
 
 
 Gaussian processes for machine learning in R.
 
 ## Introduction
 
-Gaussian Processes have recently gained a lot of attention in machine learning. Since I am fan of prediction using GPs as well I'll introduce the theory roughly. The package <code>lvgpp</code> shows how training (calculation of the posterior predictive) and prediction is done when the kernel parameters are known. In the next versions I will also implement how those are calculated by optimizing the marginal likelihood and probably include more kernels.
+Gaussian Processes have recently gained a lot of attention in machine learning. Since I am fan of prediction using GPs as well I'll introduce the theory roughly. The package <code>gpR</code> shows how training (calculation of the posterior predictive) and prediction is done when the kernel parameters are known. In the next versions I will also implement how those are calculated by optimizing the marginal likelihood and probably include more kernels.
 
 ## Installation
  
-Install `lvgpp` using:
+Install `gpR` using:
 
 ```{r}
 library(devtools)
-install_github("rafstraumur/lvgpp") 
+install_github("dirmeier/gpR") 
 ```
 
 from the R-console.
 
 ## Usage
 
-Load the package using `library(lvgpp)`. We provide a vignette for the package that can be called using: `vignette("lvgpp")`. This should be all the information you need. For regression try the demo-tour using:
+Load the package using `library(gpR)`. We provide a vignette for the package that can be called using: `vignette("gpR")`. This should be all the information you need. For regression try the demo-tour using:
 
 ```{r}
 demo.regression()
