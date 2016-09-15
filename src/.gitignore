@@ -1,0 +1,4 @@
+Makevars
+*.o
+*.so
+*.a
