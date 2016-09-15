@@ -1,11 +1,11 @@
 dnl Initialise Autoconf
 AC_PREREQ([2.69])
 AC_INIT(
-	[lvgpp],
+	[gpR],
 	[0.1],
-	[lvgpp@simon-dirmeier.net],
-	[lvgpp],
-	[https://github.com/rafstraumur/lvgpp])
+	[simon.dirmeier@gmx.de],
+	[gpR],
+	[https://github.com/dirmeier/gpR])
 AC_CONFIG_SRCDIR([src/predict_lvgpr.f95])
 
 
