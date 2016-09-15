@@ -584,7 +584,7 @@ PACKAGE_STRING='gpR 0.1'
 PACKAGE_BUGREPORT='simon.dirmeier@gmx.de'
 PACKAGE_URL='https://github.com/dirmeier/gpR'
 
-ac_unique_file="src/predict_lvgpr.f95"
+ac_unique_file="src/predict_lvgpr.f90"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 gpr_FLAGS
@@ -1727,7 +1727,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: building from R" >&5
 $as_echo "$as_me: building from R" >&6;}
 if test -z "${R_HOME}";
@@ -1736,6 +1735,7 @@ then
 $as_echo "$as_me: no R_HOME found" >&6;}
 	FC=`"${R_HOME}/bin/R" CMD config FC`
 fi
+
 
 ac_ext=${ac_fc_srcext-f}
 ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
@@ -2180,7 +2180,20 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-lvgpp_FLAGS="-std=f2008"
+gpr_FLAGS=
+
+case "${FC}" in
+    *gfortran*)
+      gpr_FLAGS="-std=f95 -O3 -Wall"
+      ;;
+    ifort)
+      gpr_FLAGS="-O3 -ax AVX -fpp -fast"
+      ;;
+    *)
+      as_fn_error $? "Unsupported Fortran compiler" "$LINENO" 5
+      ;;
+esac
+
 
 
 

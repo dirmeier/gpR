@@ -6,8 +6,7 @@ AC_INIT(
 	[simon.dirmeier@gmx.de],
 	[gpR],
 	[https://github.com/dirmeier/gpR])
-AC_CONFIG_SRCDIR([src/predict_lvgpr.f95])
-
+AC_CONFIG_SRCDIR([src/predict_lvgpr.f90])
 
 AC_MSG_NOTICE([building from R])
 if test -z "${R_HOME}";
@@ -16,8 +15,22 @@ then
 	FC=`"${R_HOME}/bin/R" CMD config FC`
 fi
 
+
 AC_PROG_FC
-lvgpp_FLAGS="-std=f2008"
+gpr_FLAGS=
+
+case "${FC}" in
+    *gfortran*)
+      gpr_FLAGS="-std=f95 -Wall"
+      ;;
+    ifort)
+      gpr_FLAGS="-O3 -ax AVX -fpp -fast"
+      ;;
+    *)
+      AC_MSG_ERROR([Unsupported Fortran compiler])
+      ;;
+esac
+
 
 AC_SUBST([gpr_FLAGS])
 
