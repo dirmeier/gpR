@@ -15,7 +15,6 @@ then
 	FC=`"${R_HOME}/bin/R" CMD config FC`
 fi
 
-
 AC_PROG_FC
 gpr_FLAGS=
 
@@ -31,9 +30,7 @@ case "${FC}" in
       ;;
 esac
 
-
 AC_SUBST([gpr_FLAGS])
-
 AC_OUTPUT([src/Makevars])
 
 AC_MSG_RESULT([
