@@ -1,1 +1,1 @@
-.onUnload <- function(libpath) library.dynam.unload("lvgpp", libpath)
+.onUnload <- function(libpath) library.dynam.unload("gpR", libpath)

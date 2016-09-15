@@ -10,16 +10,16 @@ AC_CONFIG_SRCDIR([src/predict_lvgpr.f95])
 
 
 AC_MSG_NOTICE([building from R])
-if test -z "${R_HOME}"; 
+if test -z "${R_HOME}";
 then
  	AC_MSG_NOTICE([no R_HOME found])
 	FC=`"${R_HOME}/bin/R" CMD config FC`
-fi	
+fi
 
 AC_PROG_FC
 lvgpp_FLAGS="-std=f2008"
 
-AC_SUBST([lvgpp_FLAGS])
+AC_SUBST([gpr_FLAGS])
 
 AC_OUTPUT([src/Makevars])
 
