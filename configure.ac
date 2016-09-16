@@ -6,7 +6,7 @@ AC_INIT(
 	[simon.dirmeier@gmx.de],
 	[gpR],
 	[https://github.com/dirmeier/gpR])
-AC_CONFIG_SRCDIR([src/predict_lvgpr.f90])
+AC_CONFIG_SRCDIR([src/gpr.f90])
 
 AC_MSG_NOTICE([building from R])
 if test -z "${R_HOME}";

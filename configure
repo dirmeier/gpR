@@ -584,7 +584,7 @@ PACKAGE_STRING='gpR 0.1'
 PACKAGE_BUGREPORT='simon.dirmeier@gmx.de'
 PACKAGE_URL='https://github.com/dirmeier/gpR'
 
-ac_unique_file="src/predict_lvgpr.f90"
+ac_unique_file="src/gpr.f90"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 gpr_FLAGS

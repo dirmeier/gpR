@@ -1,5 +1,6 @@
 #' Data wrapper for Gausian process regression
 #'
+#' @noRd
 #' @slot x.train  the training data for the explanatory variables
 #' @slot y.train  the training data for the dependant variables
 #' @slot x.new  the data for which the response should be predicted
@@ -12,6 +13,7 @@ setClass(
 
 #' Data wrapper for Gausian process classification
 #'
+#' @noRd
 #' @slot x.train  the training data for the explanatory variable
 #' @slot c.train  the training data for the labels
 #' @slot x.new  the data for which labels should be predicted
