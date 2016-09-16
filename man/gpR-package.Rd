@@ -3,7 +3,7 @@
 \docType{package}
 \name{gpR-package}
 \alias{gpR-package}
-\title{Package: gpR}
+\title{gpR}
 \description{
 \emph{gpR} is a Bayesian machine learning package using latent Gaussian processes.
 In general supervised machine learning can be divided in classification,

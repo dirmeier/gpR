@@ -1,4 +1,4 @@
-#' Package: gpR
+#' gpR
 #'
 #' \emph{gpR} is a Bayesian machine learning package using latent Gaussian processes.
 #' In general supervised machine learning can be divided in classification,

@@ -17,7 +17,5 @@ StripTrailingWhitespace: Yes
 
 BuildType: Package
 PackageUseDevtools: Yes
-PackageInstallArgs: --no-multiarch --with-keep.source --configure-args="FC=gfortran"
-PackageBuildArgs: FC=ifort
-PackageBuildBinaryArgs: FC=ifort
+PackageInstallArgs: --no-multiarch --with-keep.source --configure-args="FC=ifort"
 PackageRoxygenize: rd,collate,namespace

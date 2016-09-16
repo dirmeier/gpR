@@ -1,7 +1,10 @@
+#' @include classes.R
+NULL
+
 #' @title Approximate a non-Gaussian distribution to a Gaussian normal distribution using Laplace's method using Newton updates
 #'
 #' @noRd
-#' @param object  an \code{lvgpc} object
+#' @param object  an \code{lvgpc.data} object
 #' @return a list containing the MAP estimates for \code{y}, predicted labels \code{c}, the covariance \code{cov} for train and test inputs and the hessian \code{D} of the likelihood
 #' \item{map }{ the approximated MAP-estimated of the \code{y} values (also the mean since it is Gaussian)}
 #' \item{log.transform }{ the logistic transformation of the \code{map} values}

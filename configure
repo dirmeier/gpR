@@ -2186,7 +2186,7 @@ case "${FC}" in
       gpr_FLAGS="-std=f95 -Wall"
       ;;
     ifort)
-      gpr_FLAGS="-O3 -ax AVX -fpp -fast"
+      gpr_FLAGS="-fixed -fpp -fast"
       ;;
     *)
       as_fn_error $? "Unsupported Fortran compiler" "$LINENO" 5
