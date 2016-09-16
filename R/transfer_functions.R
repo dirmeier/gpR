@@ -3,4 +3,4 @@
 #' @noRd
 #' @examples
 #'  .sigmoid(1)
-.sigmoid <- function(x) (1 / (1+base::exp(-x)))
+.sigmoid <- function(x) (1 / (1 + exp(-x)))
