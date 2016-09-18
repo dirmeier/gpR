@@ -52,36 +52,38 @@
 
 
 ! compute the binomial class labels
-      subroutine predict_binomial(na, ntrain, nnew, K, ctrain, sigtrain, xnew, trainidx, newidx, me, ps, pm, Kn)
+      subroutine predict_binomial(na, ntrain, nnew, K, ctrain, sigtrain, xnew, trainidx, newidx, mnew, ps, pm, Kn)
       implicit none
       integer, intent(in)           :: na, ntrain, nnew
       integer, intent(in)           :: trainidx(ntrain), testidx(nnew)
       double precision, intent(in)  :: ct(ntrain), K(na, na), sig(ntrain), xnew(nnew),
-      double precision, intent(out) :: me(ntest), ps(nnew), pm(nnew), Kn(nnew, nnew)
+      double precision, intent(out) :: mnew(nnew), ps(nnew), pm(nnew), Kn(nnew, nnew)
 !
-      double precision :: knn
+      double precision :: knn, me, pre
       double precision, allocatable :: cm(:), Ktt(:, :), D(:, :), Knt(:), m(:), Cu(:, :)
       integer :: i
 !
       allocate(cm(ntrain), Ktt(ntrain, ntrain), D(ntrain, ntrain), Knt(n), m(n), Cu(ntrain, ntrain))
 !
-      Ktt = K(1:trainidx, 1:trainidx)
+      Ktt = K(trainidx, trainidx)
       cm = ct - sig
       D = 0.0
+      Cu  = Ktt + D
+      solve(ntrain, Cu)
       forall(i = 1:n) D(i, i) = sig(i) * (1 - sig(i))
       do i = 1, n
           Knt = K(1:trainidx, newidx(i))
           knn = k(newidx(i), newidx(i))
-          Cu  = Ktt + D
-          solve(n, Cu)
           m   = MATMUL(Knt, cm)
-          var = knn - MATMUl(MATMUL(Knt, Cu), Knt)
+          var = knn - MATMUL(MATMUL(Knt, Cu), Knt)
           me  = lognint(m, var)
           pre =  1 / (1 + exp(-rnorm(m, var)))
           ps(i) = pre
           pm(i) = me
       end do
-i     
+i     mnew = MATMUL(K(tnewidx, trainidx), cm)
+      Kn = K(newidx, newidx) / MATMUL(MATMUL(K(newidx, trainidx), Cu), K(trainidx, testidx))
+
       deallocate(cm, Ktt, Knt, D, m, Cu)
       return
       end subroutine
