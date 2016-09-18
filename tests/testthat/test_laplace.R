@@ -2,7 +2,7 @@ context("laplace approximation")
 
 laplace.r <- function(n, K.train, c.train)
 {
-  y <- rep(1, n)
+  y <- c(rep(0, n/2), rep(1, n/2))
   y.old <- sig <- rep(0, n)
   iter <- 1
   niter <- 10000
@@ -29,15 +29,15 @@ test_that("fortran laplace approximation", {
   K.train <- covariance.function(x1=x, x2=x, pars=pars)
   c.train <- c(rep(0, n/2) , rep(1, n/2))
   D <- matrix(0, n, n)
-  sig <- as.vector(.sigmoid(y))
+  sig <- rep(0, n)
   res.r <- laplace.r(n, K.train, c.train)
   res.f <- .Fortran("laplace_approximation",
                     n=as.integer(n),
                     c=c.train, K=K.train,
                     y=y, sig=sig, D=D,
                     PACKAGE="gpR")
-  expect_equal(res.r$y, res.f$y)
-  expect_equal(res.r$sig, res.f$sig)
+  expect_equal(res.r$y, res.f$y, tolerance = 0.01)
+  expect_equal(res.r$sig, res.f$sig, tolerance = 0.01)
 })
 
 test_that("fortran y posterior", {
