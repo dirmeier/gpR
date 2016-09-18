@@ -85,6 +85,6 @@ setMethod("approx.posterior", signature(obj = "lvgpc.data"),
 #'  .logistic.normal.integral(0, 1)
 .logistic.normal.integral <- function(m, sig)
 {
-  lam <- base::sqrt(pi)/4
-  0.5 + 0.5 * pracma::erf(lam * m / base::sqrt(1 + 2*lam**2*sig))
+  lam <- sqrt(pi)/4
+  0.5 + 0.5 * pracma::erf(lam * m / sqrt(1 + 2 * lam**2 * sig))
 }

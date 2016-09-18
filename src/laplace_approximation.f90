@@ -9,14 +9,14 @@
       double precision, intent(in)  :: c(n), K(n, n), sig(n), D(n, n), DIAG(n, n)
       double precision, intent(out) :: y(n)
 
-      double precision, allocatable :: CURR(:, :), work(:), bla(:)
+      double precision, allocatable :: CURR(:, :), work(:)
       integer,          allocatable :: ipiv(:)
       integer :: info
 ! load Lapack routines for matrix inversion
       external DGETRF
       external DGETRI
 
-      allocate(CURR(n, n), work(n), bla(N))
+      allocate(CURR(n, n), work(n))
       allocate(ipiv(n))
 ! calculate the Newton update
       CURR = MATMUL(D, K) + DIAG
@@ -24,7 +24,7 @@
       call DGETRI(n, CURR, n, ipiv, work, n, info)
       y = MATMUL(MATMUL(K, CURR), MATMUL(D, y) + c - sig)
 
-      deallocate(CURR, work, ipiv, bla)
+      deallocate(CURR, work, ipiv)
       return
       end subroutine
 

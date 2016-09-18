@@ -77,16 +77,3 @@ predict.binomial <- function(obj, ...)
   class(ret) <- "lvgpc.pred"
   ret
 }
-
-#' @noRd
-.predict.binomial <- function()
-{
-  # .Fortran("predict_binomial",
-  #          n=as.integer(n),
-  #          c=c.train,
-  #          K=K.train,
-  #          y=y,
-  #          sig=sig,
-  #          D=D,
-  #          PACKAGE="gpR")
-}
