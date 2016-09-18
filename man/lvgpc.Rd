@@ -2,7 +2,7 @@
 % Please edit documentation in R/gpc.R
 \name{lvgpc}
 \alias{lvgpc}
-\title{Prediction of binomial-distributed random variables using GP classification}
+\title{Prediction of binomial-distributed random variables using GP regression}
 \usage{
 lvgpc(x.train = NULL, c.train = NULL, x.new = NULL, pars = list(var = 1,
   inv.scale = 2, gamma = 2, noise = 0.1, kernel = "gamma.exp"), ...)
@@ -32,7 +32,7 @@ an \code{lvgpc.pred} object
 }
 \description{
 Prediction of binomial-distributed
-  random variables using GP classification
+  random variables using GP regression
 }
 \examples{
  x.train <- seq(-5, 5, .1)

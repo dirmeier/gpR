@@ -9,12 +9,12 @@
 covariance.function <- function(x1, x2, pars)
 {
   fun <-  switch(pars$kernel, gamma.exp = .gamma.exp, NULL)
-  if (base::is.null(fun))
+  if (is.null(fun))
     stop("Wrong kernel provided! Pls check method documentation for details.")
-  K <- base::matrix(outer(x1, x2, FUN = function(x, y) fun(x, y, pars)),
-              base::length(x1), base::length(x2))
-  if (length(pars) == 5 && base::length(x1) == base::length(x2))
-    K <- K + pars$noise * base::diag(length(x1))
+  K <- matrix(outer(x1, x2, FUN = function(x, y) fun(x, y, pars)),
+              length(x1), length(x2))
+  if (length(pars) == 5 && length(x1) == length(x2))
+    K <- K + pars$noise * diag(length(x1))
   invisible(K)
 }
 
@@ -27,5 +27,5 @@ covariance.function <- function(x1, x2, pars)
 function(x1, x2, pars)
 {
   d <- x1 - x2
-  pars$var * base::exp(- (1/(pars$inv.scale)) * (d**pars$gamma))
+  pars$var * exp(- (1/(pars$inv.scale)) * (d**pars$gamma))
 }

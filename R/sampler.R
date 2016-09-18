@@ -8,17 +8,16 @@
 #' @return a vector of normal-distributed values
 #' @examples
 #'  sample.from.gp()
-sample.from.gp <-
-function(x=seq(-10, 10, .25),m=NULL, K=NULL)
+sample.from.gp <- function(x=seq(-10, 10, .25), m=NULL, K=NULL)
 {
-  xlen <- base::length(x)
-  if (base::is.null(m)) m <- base::rep(0)
-  if (base::is.null(K))
+  xlen <- length(x)
+  if (is.null(m)) m <- rep(0)
+  if (is.null(K))
     K <- covariance.function(x, x,
                              list(var=1, inv.scale=2, gamma=2,
                                   noise=0, kernel="gamma.exp"))
   # small pseudo-count for numerical stability
-  C <- 1e-5 * base::diag(xlen)
+  C <- 1e-5 * diag(xlen)
   # standard transformation of Gaussian random variables: X <- \mu + \sigma Z
   # the cholesky decomposition of a matrix K is its square root
   # the square root of the covariance yields the standard deviation
@@ -27,8 +26,8 @@ function(x=seq(-10, 10, .25),m=NULL, K=NULL)
   # we are safe to use chol().
   # thus the 'sampling' from a Gaussian process is just generating
   # xlen random variables and transforming them accordingly
-  y <- m + base::t(base::chol(K + C)) %*% stats::rnorm(xlen)
-  base::as.vector(y)
+  y <- m + t(chol(K + C)) %*% stats::rnorm(xlen)
+  as.vector(y)
 }
 
 #' Sample a Gaussian random variable
@@ -54,12 +53,12 @@ function(x=seq(-10, 10, .25),m=NULL, K=NULL)
 .sample.from.sigmoid.gp <-
 function(x=seq(-10, 10, .25),m=NULL, K=NULL)
 {
-  xlen <- base::length(x)
-  if (base::is.null(m)) m <- base::rep(0, xlen)
-  if (base::is.null(K))
+  xlen <- length(x)
+  if (is.null(m)) m <- rep(0, xlen)
+  if (is.null(K))
     K <- covariance.function(
       x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
   y.latent <- sample.from.gp(x, m, K)
   y <- .sigmoid(y.latent)
-  base::as.vector(y)
+  as.vector(y)
 }

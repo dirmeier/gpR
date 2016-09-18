@@ -30,6 +30,8 @@ Collate:
     'gpr.R'
     'kernels.R'
     'predict.R'
+    'predict_binomial.R'
+    'predict_gaussian.R'
     'sampler.R'
     'transfer_functions.R'
     'zzz.R'
