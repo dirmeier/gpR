@@ -1,5 +1,7 @@
-     subroutine y_posterior(n, c, K, y, sig, D, DIAG)
-!
+
+      subroutine newton_step(n, c, K, y, sig, D, DIAG)
+! compute Newton update
+! references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18
       implicit none
       integer, intent(in)           :: n
       double precision, intent(in)  :: c(n), K(n, n), sig(n), D(n, n), DIAG(n, n)
@@ -26,7 +28,7 @@
 !
 !
       subroutine laplace_approximation(n, c, K, y, sig, D)
-!
+! compute the Laplace approximation around the mode
       implicit none
       integer, intent(in)           :: n
       double precision, intent(in)  :: c(n), K(n, n)
@@ -57,13 +59,17 @@
       !
       do while (sum(abs(y - yold)) > thresh .and. iter < niter)
           yold = y
+! compute class mapping for y        
           forall(i = 1:n) sig(i) = 1 / (1 + exp(-y(i)))
+! compute Hessian of log-likelihood (ONLY IN THIS CASE WHERE THE LOG-TRANSFORM IS USED!)          
           forall(i = 1:n) D(i, i) = sig(i) * (1 - sig(i))
           CURR = MATMUL(D, K) + DIAG
           call DGETRF(n, n, CURR, n, ipiv, info)
+! invert CURR          
           call DGETRI(n, CURR, n, ipiv, work, n, info)
+! calculate Newton step
           y = MATMUL(MATMUL(K, CURR), MATMUL(D, y) + c - sig)
-          !call y_posterior(n, c, K, y, sig, D, DIAG)
+          ! call newton_step(n, c, K, y, sig, D, DIAG)
           iter = iter + 1
       end do
 !

@@ -40,7 +40,7 @@ test_that("fortran laplace approximation", {
   expect_equal(res.r$sig, res.f$sig, tolerance = 0.01)
 })
 
-test_that("fortran y posterior", {
+test_that("fortran newton_step", {
   n <- 100
   y <- c(rep(0, n/2), rep(1, n/2))
   diagn <- diag(n)
@@ -52,7 +52,7 @@ test_that("fortran y posterior", {
   DIAG <- diag(n)
   sig <- as.vector(.sigmoid(y))
   D <- diag(sig*(1-sig))
-  res.f <- .Fortran("y_posterior",
+  res.f <- .Fortran("newton_step",
                    n=as.integer(n),
                    c=c.train, K=K.train,
                    y=y, sig=sig, D=D,
