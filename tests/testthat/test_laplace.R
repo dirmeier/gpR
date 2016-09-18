@@ -60,7 +60,7 @@ test_that("fortran newton_step", {
                    PACKAGE="gpR")$y
   res.r <- as.vector(K.train %*% solve(diagn + D %*% K.train) %*%
                        (D%*%y + c.train  - sig))
-  expect_equal(res.r, res.f)
+  expect_equal(res.r, res.f,  tolerance = 0.01)
 })
 
 

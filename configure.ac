@@ -23,7 +23,7 @@ case "${FC}" in
       gpr_FLAGS="-std=f95 -Wall"
       ;;
     ifort)
-      gpr_FLAGS="-fixed -fpp -fast"
+      gpr_FLAGS="-fpp -fast"
       ;;
     *)
       AC_MSG_ERROR([Unsupported Fortran compiler])

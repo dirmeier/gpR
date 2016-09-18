@@ -18,4 +18,4 @@ env:
     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran"
 
 after_success:
-  - R -e 'covr::codecov()'
+  - Rscript -e "covr::codecov(line_exclusions = list('R/zzz.R'))"
