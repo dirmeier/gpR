@@ -8,5 +8,5 @@ test_that("classification predicts correctly", {
   pred <- lvgpc(x.train, c.train, x.new, pars)$mean.c.predict
   pred[pred < .5] <- 0
   pred[pred >= .5] <- 1
-  expect_equal(pred, c.train, tolerance = 0.005 )
+  expect_equal(pred, c.train, tolerance = 0.005)
 })

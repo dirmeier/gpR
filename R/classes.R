@@ -7,7 +7,8 @@
 #' @slot pars  parameter list
 setClass(
   "lvgpr.data",
-  representation(x.train="numeric", y.train="numeric",x.new="numeric", pars="list"),
+  representation(x.train="numeric", y.train="numeric",
+                 x.new="numeric", pars="list"),
   validity=function(object)length(object@x.train) == length(object@y.train)
 )
 
@@ -20,7 +21,8 @@ setClass(
 #' @slot pars  parameter list
 setClass(
   "lvgpc.data",
-  representation(x.train="numeric", c.train="numeric",x.new="numeric", pars="list"),
+  representation(x.train="numeric", c.train="numeric",
+                 x.new="numeric", pars="list"),
   validity=function(object) all(object@c.train %in% c(0,1)) &
     (length(object@x.train) == length(object@c.train))
 )

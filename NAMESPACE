@@ -2,7 +2,6 @@
 
 S3method(lvgpc,default)
 S3method(lvgpr,default)
-export(.approx.posterior.f)
 export(demo.bin.classification)
 export(demo.regression)
 export(lvgpc)

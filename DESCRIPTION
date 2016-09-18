@@ -25,7 +25,6 @@ Collate:
     'classes.R'
     'approx.R'
     'demo.R'
-    'fort.R'
     'gpR_package.R'
     'kernels.R'
     'lvgpp.R'

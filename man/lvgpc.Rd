@@ -14,7 +14,8 @@ lvgpc(x.train = NULL, c.train = NULL, x.new = NULL, pars = list(var = 1,
 
 \item{x.new}{vector of variables for which a response should be predicted}
 
-\item{pars}{a list containing the hyper-parameters and kernel specifications}
+\item{pars}{a list containing the hyper-parameters
+and kernel specifications}
 
 \item{...}{additional parameters (not specified)}
 }
@@ -23,13 +24,15 @@ An object of class \code{lvgpc.pred}
 
 an \code{lvgpc.pred} object
 \item{c.predict }{ the predicted c* values given the \code{lvgpc} object}
-\item{mean.c.predict }{ the predicted mean c* values given the \code{lvgpc} object}
+\item{mean.c.predict }{ the predicted mean c* values
+ given the \code{lvgpc} object}
 \item{mean }{ the (approximated) posterior mean values}
 \item{cov  }{ the (approximated) posterior covariance/kernel}
 \item{call  }{ the function call}
 }
 \description{
-Prediction of binomial-distributed random variables using GP classification
+Prediction of binomial-distributed
+  random variables using GP classification
 }
 \examples{
  x.train <- seq(-5, 5, .1)
@@ -39,9 +42,11 @@ Prediction of binomial-distributed random variables using GP classification
  pred <- lvgpc(x.train, c.train, x.new, pars)
 }
 \references{
-Rasmussen C.E. and Williams C.K.I. (2006), \emph{Gaussian Processes for Machine Learning}, MIT Press \cr
+Rasmussen C.E. and Williams C.K.I. (2006),
+ \emph{Gaussian Processes for Machine Learning}, MIT Press \cr
  \url{http://www.gaussianprocess.org/gpml/} \cr \cr
- Barber D. (2013), \emph{Bayesian Reasoning and Machine Learning}, Cambridge University Press \cr
+ Barber D. (2013), \emph{Bayesian Reasoning and Machine Learning},
+ Cambridge University Press \cr
  \url{http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage}
 }
 

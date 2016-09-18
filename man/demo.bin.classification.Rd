@@ -7,8 +7,11 @@
 demo.bin.classification()
 }
 \description{
-Run a GPC example. Generate class labels using the sigmoid prior GP, then learn the posterior GP and predict a new set of data points.
- Plot both samples from the sigmoid prior and the sigmoid posterior and the mean prediction of the posterior.
+Run a GPC example.
+ Generate class labels using the sigmoid prior GP,
+ then learn the posterior GP and predict a new set of data points.
+ Plot both samples from the sigmoid prior and the sigmoid posterior
+ and the mean prediction of the posterior.
 }
 \examples{
  demo.bin.classification()

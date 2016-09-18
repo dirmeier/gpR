@@ -15,14 +15,18 @@ function(x=seq(-10, 10, .25),m=NULL, K=NULL)
   if (base::is.null(m)) m <- base::rep(0)
   if (base::is.null(K))
     K <- covariance.function(x, x,
-                             base::list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
+                             list(var=1, inv.scale=2, gamma=2,
+                                  noise=0, kernel="gamma.exp"))
   # small pseudo-count for numerical stability
   C <- 1e-5 * base::diag(xlen)
   # standard transformation of Gaussian random variables: X <- \mu + \sigma Z
   # the cholesky decomposition of a matrix K is its square root
   # the square root of the covariance yields the standard deviation
-  # K has to be symmetric and semi-definite. Since this is a requirement for a kernel-function, we are safe to use chol()
-  # thus the 'sampling' from a Gaussian process is just generating xlen random variables and transforming them accordingly
+  # K has to be symmetric and semi-definite.
+  # Since this is a requirement for a kernel-function,
+  # we are safe to use chol().
+  # thus the 'sampling' from a Gaussian process is just generating
+  # xlen random variables and transforming them accordingly
   y <- m + base::t(base::chol(K + C)) %*% stats::rnorm(xlen)
   base::as.vector(y)
 }
@@ -53,8 +57,8 @@ function(x=seq(-10, 10, .25),m=NULL, K=NULL)
   xlen <- base::length(x)
   if (base::is.null(m)) m <- base::rep(0, xlen)
   if (base::is.null(K))
-    K <- covariance.function(x, x,
-                             base::list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
+    K <- covariance.function(
+      x, x, list(var=1, inv.scale=2, gamma=2, noise=0, kernel="gamma.exp"))
   y.latent <- sample.from.gp(x, m, K)
   y <- .sigmoid(y.latent)
   base::as.vector(y)

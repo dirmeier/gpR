@@ -33,14 +33,19 @@ function(obj, ...)
   x.new   <- obj@x.new
   pars    <- obj@pars
   # small pseudo-count for numerical stability
-  C <- 1e-5 * base::diag(length(x.train))
+  C <- 1e-5 * diag(length(x.train))
   # covariance of training inputs and new inputs
   cov.new.train <- covariance.function(x1=x.new, x2=x.train, pars=pars)
   # inverse covariance of training points
-  cov.inv.train.train <- base::solve(C + covariance.function(x1=x.train, x2=x.train, pars=pars))
-  # posterior mean value (see references: Barber p396, Equation~19.2.5; Rasmussen p16, Equation~2.23)
+  cov.inv.train.train <- solve(C + covariance.function(x1=x.train,
+                                                       x2=x.train,
+                                                       pars=pars))
+  # posterior mean value (see references: Barber p396, Equation~19.2.5;
+  #                                       Rasmussen p16, Equation~2.23)
   m <- cov.new.train %*% cov.inv.train.train %*% y.train
-  # posterior covariance of new inputs (see references: Barber p396, Equation~19.2.5; Rasmussen p16, Equation~2.24)
+  # posterior covariance of new inputs
+  #  (see references: Barber p396, Equation~19.2.5;
+  #                   Rasmussen p16, Equation~2.24)
   cov.new.new <- covariance.function(x1=x.new, x2=x.new, pars=pars) -
     cov.new.train %*% cov.inv.train.train %*% t(cov.new.train)
   # sample from the posterior Gaussian process to get y*
@@ -70,35 +75,44 @@ function(obj, ...)
   x.train <- obj@x.train
   c.train <- obj@c.train
   x.new   <- obj@x.new
-  n <- base::length(x.train)
+  n <- length(x.train)
   train <- 1:n
-  test <- 1:base::length(x.new) + n
-  # approximate the mode/mean of the posterior, its covariance, the estimated class mappings and the Hessian of the log-likelihood
+  test <- 1:length(x.new) + n
+  # approximate the mode/mean of the posterior, its covariance,
+  #  the estimated class mappings and the Hessian of the log-likelihood
   approx <- .approx.posterior(obj)
   # logistic transform of posterior mean values
   sig <- approx$log.transform
   # joint covariance matrix of x.train and x.new
   K <- approx$cov
   cov.train.train <- K[train, train]
-  # compute log probability of the class mapping of c.train given the posterior mean (see references: Barber p406, Equation~19.5.24; Rasmussen p44, Equation~3.15 & Equation~3.21)
+  # compute log probability of the class mapping of c.train given
+  # the posterior mean
+  # (see references: Barber p406, Equation~19.5.24;
+  #                  Rasmussen p44, Equation~3.15 & Equation~3.21)
   c.mean <- c.train - sig
   # compute the inverse of the Hessian of the log-likelihood
-  Dinv <- base::diag(1/(sig*(1-sig)))
+  Dinv <- diag(1 / (sig * (1 - sig)))
   pred.means <- pred.samples <- base::c()
   # make a prediction for all new input points
-  for (i in base::seq(base::length(x.new)))
+  for (i in seq(length(x.new)))
   {
     # get the covariance of the training points and a new input
     cov.new.train <- t(K[train, test[i]])
     # get the variance of the new input point
     cov.new.new <- K[test[i], test[i]]
-    # compute the posterior mean of the predictive distribution (see references: Barber p406, Equation~19.5.24; Rasmussen p44, Equation~3.21)
+    # compute the posterior mean of the predictive distribution
+    # (see references: Barber p406, Equation~19.5.24;
+    #                  Rasmussen p44, Equation~3.21)
     m <- cov.new.train %*% c.mean
-    # compute the posterior variance of the predictive distribution (see references: Barber p406, Equation~19.5.26; Rasmussen p44, Equation~3.24)
+    # compute the posterior variance of the predictive distribution
+    # (see references: Barber p406, Equation~19.5.26;
+    #                  Rasmussen p44, Equation~3.24)
     var <- cov.new.new - cov.new.train %*%
-      base::solve(cov.train.train + Dinv) %*%
-      base::t(cov.new.train)
-    # compute the mean class probability mapping (see references: Barber p406, Equation~19.5.27; Rasmussen p44, Equation~3.25)
+      solve(cov.train.train + Dinv) %*% t(cov.new.train)
+    # compute the mean class probability mapping
+    # (see references: Barber p406, Equation~19.5.27;
+    #                  Rasmussen p44, Equation~3.25)
     me <- .logistic.normal.integral(m, var)
     # compute a sample from the posterior class mapping
     pre <- .sigmoid(.sample.gaussian(m, var))
@@ -108,9 +122,8 @@ function(obj, ...)
   }
   m.new <- K[test, train] %*% c.mean
   cov.new.new <- K[test, test] - K[test, train] %*%
-    base::solve(cov.train.train + Dinv) %*%
-    K[train, test]
-  c.labels <- base::rep(0, base::length(pred.samples))
+    solve(cov.train.train + Dinv) %*% K[train, test]
+  c.labels <- rep(0, length(pred.samples))
   c.labels[pred.samples >= 0.5] <- 1
   ret <- base::list(mean.c.predict=pred.means,
               c.predict=pred.samples,

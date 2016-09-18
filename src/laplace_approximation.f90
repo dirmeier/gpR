@@ -1,22 +1,44 @@
+     subroutine y_posterior(n, c, K, y, sig, D, DIAG)
+!
+      implicit none
+      integer, intent(in)           :: n
+      double precision, intent(in)  :: c(n), K(n, n), sig(n), D(n, n), DIAG(n, n)
+      double precision, intent(out) :: y(n)
+!
+      double precision, allocatable :: CURR(:, :), work(:), bla(:)
+      integer,          allocatable :: ipiv(:)
+      integer :: info
+!
+      external DGETRF
+      external DGETRI
+!
+      allocate(CURR(n, n), work(n), bla(N))
+      allocate(ipiv(n))
+!
+      CURR = MATMUL(D, K) + DIAG
+      call DGETRF(n, n, CURR, n, ipiv, info)
+      call DGETRI(n, CURR, n, ipiv, work, n, info)
+      y = MATMUL(MATMUL(K, CURR), MATMUL(D, y) + c - sig)
+!
+      deallocate(CURR, work, ipiv, bla)
+      return
+      end subroutine
+!
+!
       subroutine laplace_approximation(n, c, K, y, sig, D)
 !
       implicit none
       integer, intent(in)           :: n
       double precision, intent(in)  :: c(n), K(n, n)
       double precision, intent(out) :: y(n), sig(n), D(n, n)
-! 
-      double precision, allocatable :: yold(:), S(:, :), DIAG(:, :), CURR(:, :), work(:)
-      integer,          allocatable :: ipiv(:)
 !
-      double precision, parameter :: thresh = 0.0000001
-      integer, parameter :: niter = 100000
-      integer :: i, info, iter = 1
+      double precision, allocatable :: yold(:), DIAG(:, :)
 !
-      external DGETRF
-      external DGETRI
-
-      allocate(yold(n), S(n, n), DIAG(n, n), CURR(n, n), work(n))
-      allocate(ipiv(n))
+      double precision, parameter :: thresh = 0.00001
+      integer, parameter :: niter = 10000
+      integer :: i, iter = 1
+!
+      allocate(yold(n), DIAG(n, n))
 !
       DIAG = 0
       D = 0
@@ -26,15 +48,11 @@
       do while (sum(abs(y - yold)) > thresh .and. iter < niter)
           yold = y
           forall(i = 1:n) sig(i) = 1 / (1 + exp(y(i)))
-          forall(i = 1:n) D(i, i) = y(i) * (1 - y(i))
-          CURR = DIAG + MATMUL(D, K)
-          call DGETRF(n, n, CURR, n, ipiv, info)
-          call DGETRI(n, CURR, n, ipiv, work, n, info)
-          y = MATMUL(MATMUL(K, CURR), MATMUL(D, y) + c - sig)
+          forall(i = 1:n) D(i, i) = sig(i) * (1 - sig(i))
+          call y_posterior(n, c, K, y, sig, D, DIAG)
           iter = iter + 1
       end do
-
-      deallocate(yold, S, DIAG, CURR, work, ipiv)
+!
+      deallocate(yold, DIAG)
       return
       end subroutine
-
