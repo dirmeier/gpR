@@ -80,7 +80,7 @@ function(obj, ...)
   test <- 1:length(x.new) + n
   # approximate the mode/mean of the posterior, its covariance,
   #  the estimated class mappings and the Hessian of the log-likelihood
-  approx <- .approx.posterior(obj)
+  approx <- approx.posterior(obj, ...)
   # logistic transform of posterior mean values
   sig <- approx$log.transform
   # joint covariance matrix of x.train and x.new
