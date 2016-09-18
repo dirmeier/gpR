@@ -35,19 +35,21 @@
       end function lognint
 
 ! draw from a Gaussian distribution using polar Box-Muller transform
-      function rnorm(m, sd)
+      pure function rnorm(m, sd)
       implicit none
       double precision, intent(in) :: m, sd
-      double precision             :: x1, x2, w, y1, y2
-
-      w = 1.0
-      do while( i < 5 )
-          x1 = 2.0 * rand() - 1.0;
-          x2 = 2.0 * rand() - 1.0;
-          w = x1 * x1 + x2 * x2;
+      double precision             :: x, y, t, rnorm
+!
+      t = 2.0
+      do while(t >= 1)
+          x = 2.0 * rand() - 1.0
+          y = 2.0 * rand() - 1.0
+          t = x * x + y * y
       end do
-
+      t = sqrt((-2.0 * log(t)) / t)
+      rnorm = t * x
       end function rnorm
+
 
 ! compute the binomial class labels
       subroutine predict_binomial(na, ntrain, nnew, K, ctrain, sigtrain, xnew, trainidx, newidx, me, ps, pm, Kn)
@@ -75,23 +77,12 @@
           m   = MATMUL(Knt, cm)
           var = knn - MATMUl(MATMUL(Knt, Cu), Knt)
           me  = lognint(m, var)
-          pre =  1 / (1 + exp(- ))
+          pre =  1 / (1 + exp(-rnorm(m, var)))
+          ps(i) = pre
+          pm(i) = me
       end do
+i     
       deallocate(cm, Ktt, Knt, D, m, Cu)
       return
       end subroutine
 
-!  for (i in seq(length(x.new)))
-!  {
-!    cov.new.train <- t(K[train, test[i]])
-!    cov.new.new <- K[test[i], test[i]]
-!    m <- cov.new.train %*% c.mean
-!    var <- cov.new.new - cov.new.train %*% solve(cov.train.train + Dinv) %*% t(cov.new.train)
-!    me <- .logistic.normal.integral(m, var)
-!    pre <- .sigmoid(.sample.gaussian(m, var))
-!    pred.samples <- c(pred.samples , pre)
-!    pred.means   <- c(pred.means, me)
-!  }
-!  m.new <- K[test, train] %*% c.mean
-!  cov.new.new <- K[test, test] - K[test, train] %*%
-!    solve(cov.train.train + Dinv) %*% K[train, test]
