@@ -1,13 +1,20 @@
 #' @title Covariance function
 #'
-#' @noRd
 #' @description Calculates the covariance/kernel of a set of input points
+#'
+#' @export
 #' @param x1  a vector of random real numbers
 #' @param x2  a vector of random real numbers
 #' @param pars  a list containing hyperparameters and kernel specification
 #' @return the calculated kernel/covariance matrix of size (\code{length(x1)} x \code{length(x2)})
-covariance.function <- function(x1, x2, pars)
+#' @examples
+#'  x <- rnorm(100)
+#'  pars <- list(var=1, inv.scale=2, gamma=2, noise=.1, kernel="gamma.exp")
+#'  K <- covariance.function(x, x, pars)
+covariance.function <- function(x1, x2, pars=NULL)
 {
+  if (is.null(pars))
+    pars <- list(var=1, inv.scale=2, gamma=2, noise=.1, kernel="gamma.exp")
   fun <-  switch(pars$kernel, gamma.exp = .gamma.exp, NULL)
   if (is.null(fun))
     stop("Wrong kernel provided! Pls check method documentation for details.")
