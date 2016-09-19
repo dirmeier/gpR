@@ -25,29 +25,29 @@
 
 
 ! calculate the logistic normal integral using the error function
-      pure function lognint(m, var) result(e)
+      double precision function lognint(m, var) result(e)
       implicit none
       double precision, intent(in) :: m, var
       double precision, parameter :: PI = 3.1415926535897932
-      double precision            :: e, lam
+      double precision            :: lam
       lam = sqrt(PI / 4)
       e = .5 + .5 * erf(lam * m / sqrt(1.0 + (2 * (lam ** 2.0) * var)))
       end function lognint
 
 ! draw from a Gaussian distribution using polar Box-Muller transform
-      pure function rnorm(m, sd)
+      double precision function rnorm(m, sd)
       implicit none
       double precision, intent(in) :: m, sd
-      double precision             :: x, y, t, rnorm
-!
-      t = 2.0
-      do while(t >= 1)
+      double precision :: x, y, tr
+
+      tr = 2.0
+      do while(tr >= 1)
           x = 2.0 * rand() - 1.0
           y = 2.0 * rand() - 1.0
-          t = x * x + y * y
+          tr = x * x + y * y
       end do
-      t = sqrt((-2.0 * log(t)) / t)
-      rnorm = t * x
+      tr = sqrt((-2.0 * log(tr)) / tr)
+      rnorm = tr * x
       end function rnorm
 
 
@@ -55,36 +55,40 @@
       subroutine predict_binomial(na, ntrain, nnew, K, ctrain, sigtrain, xnew, trainidx, newidx, mnew, ps, pm, Kn)
       implicit none
       integer, intent(in)           :: na, ntrain, nnew
-      integer, intent(in)           :: trainidx(ntrain), testidx(nnew)
-      double precision, intent(in)  :: ct(ntrain), K(na, na), sig(ntrain), xnew(nnew),
+      integer, intent(in)           :: trainidx(ntrain), newidx(nnew)
+      double precision, intent(in)  :: ctrain(ntrain), K(na, na) 
+      double precision, intent(in)   :: sigtrain(ntrain), xnew(nnew)
       double precision, intent(out) :: mnew(nnew), ps(nnew), pm(nnew), Kn(nnew, nnew)
 !
-      double precision :: knn, me, pre
-      double precision, allocatable :: cm(:), Ktt(:, :), D(:, :), Knt(:), m(:), Cu(:, :)
-      integer :: i
+      double precision :: knn, me, pre, var, m, rn
+      double precision, allocatable :: cm(:), Ktt(:, :), D(:, :), Knt(:, :), Cu(:, :)
+      integer :: i, cidx
 !
-      allocate(cm(ntrain), Ktt(ntrain, ntrain), D(ntrain, ntrain), Knt(n), m(n), Cu(ntrain, ntrain))
+      allocate(cm(ntrain), Ktt(ntrain, ntrain), D(ntrain, ntrain))
+      allocate(Knt(ntrain, 1), Cu(ntrain, ntrain))
 !
-      Ktt = K(trainidx, trainidx)
-      cm = ct - sig
+      Ktt = K(1:ntrain, 1:ntrain)
+      cm = ctrain - sigtrain
       D = 0.0
       Cu  = Ktt + D
-      solve(ntrain, Cu)
-      forall(i = 1:n) D(i, i) = sig(i) * (1 - sig(i))
-      do i = 1, n
+      call solve(ntrain, Cu)
+      forall(i = 1:ntrain) D(i, i) = sigtrain(i) * (1 - sigtrain(i))
+      do i = 1, nnew
+          cidx = newidx(i)
           Knt = K(1:trainidx, newidx(i))
-          knn = k(newidx(i), newidx(i))
-          m   = MATMUL(Knt, cm)
-          var = knn - MATMUL(MATMUL(Knt, Cu), Knt)
+          knn = K(cidx, cidx)
+          m   = sum(MATMUL(Knt, cm))
+          var = knn - sum(MATMUL(MATMUL(TRANSPOSE(Knt), Cu), Knt))
           me  = lognint(m, var)
-          pre =  1 / (1 + exp(-rnorm(m, var)))
+          rn = rnorm(m, var)
+          pre =  1 / (1 + exp(-1 * rn ))
           ps(i) = pre
           pm(i) = me
       end do
-i     mnew = MATMUL(K(tnewidx, trainidx), cm)
-      Kn = K(newidx, newidx) / MATMUL(MATMUL(K(newidx, trainidx), Cu), K(trainidx, testidx))
+      mnew = MATMUL( K((ntrain+1):nnew, 1:ntrain), cm)
+      Kn = K(newidx, newidx) / MATMUL(MATMUL(K((ntrain+1):nnew, 1:ntrain), Cu), K((ntrain+1):nnew, 1:ntrain))
 
-      deallocate(cm, Ktt, Knt, D, m, Cu)
+      deallocate(cm, Ktt, Knt, D, Cu)
       return
       end subroutine
 
