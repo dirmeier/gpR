@@ -18,7 +18,7 @@ predict.r <- function(K, c.train, sig, x.new, train, test)
     pred.samples <- c(pred.samples , pre)
     pred.means   <- c(pred.means, me)
   }
-  m.new <- K[test, train] %*% c.mean
+  m.new <- (K[test, train] %*% c.mean)[,1]
   cov.new.new <- K[test, test] - K[test, train] %*%
     solve(cov.train.train + Dinv) %*% K[train, test]
   list(m.new=m.new,
@@ -35,7 +35,7 @@ predict.f <- function(K, c.train, sig, x.new, train, test)
   me <- pred.sample <- pred.means <- rep(0, nnew)
   K.new.new <- matrix(0, nnew, nnew)
   res <- .Fortran("predict_binomial",
-                  n=as.integer(n),
+                  na=as.integer(n),
                   ntrain=as.integer(ntrain),
                   nnew=as.integer(nnew),
                   K=K,
@@ -56,8 +56,8 @@ predict.f <- function(K, c.train, sig, x.new, train, test)
 }
 
 test_that("fortran binomial prediction", {
-  ntrain <- 1000
-  nnew <- 100
+  ntrain <- 100
+  nnew <- 10
   x.train <- rnorm(ntrain)
   x.new  <- rnorm(nnew)
   x.norm <- c(x.train, x.new)
@@ -68,5 +68,7 @@ test_that("fortran binomial prediction", {
   test <- 1:nnew + ntrain
   res.r <- predict.r(K, c.train, sig, x.new, train, test)
   res.f <- predict.f(K, c.train, sig, x.new, train, test)
-  expect_equal(res.r$m.new, res.f$m.new, tolerance=.01)
+  expect_equal(res.r$m.new, res.f$m.new, tolerance=.001)
+  expect_equal(res.r$pred.samples, res.f$pred.samples, tolerance=.5)
+  expect_equal(res.r$pred.means, res.f$pred.means, tolerance=.5)
 })

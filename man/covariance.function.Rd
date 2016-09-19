@@ -4,7 +4,7 @@
 \alias{covariance.function}
 \title{Covariance function}
 \usage{
-covariance.function(x1, x2, pars)
+covariance.function(x1, x2, pars = NULL)
 }
 \arguments{
 \item{x1}{a vector of random real numbers}
