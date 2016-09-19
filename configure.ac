@@ -20,10 +20,10 @@ gpr_FLAGS=
 
 case "${FC}" in
     *gfortran*)
-      gpr_FLAGS="-std=f95 -Wall"
+      gpr_FLAGS="-std=f2008 -Wall"
       ;;
     ifort)
-      gpr_FLAGS="-fpp -fast"
+      gpr_FLAGS="-std08 -fpp -fast"
       ;;
     *)
       AC_MSG_ERROR([Unsupported Fortran compiler])

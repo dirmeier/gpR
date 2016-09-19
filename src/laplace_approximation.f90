@@ -1,29 +1,31 @@
-!! Fortran routines for calculation of Laplace approximation and Newton updated.
-!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! Fortran routines for calculation of Laplace approximation and Newton updated.
+!!!
+!!! @author: Simon Dirmeier
+!!! @email: simon.dirmeier@gmx.de
+!!!
 
-! compute Newton update
-! references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18
+!! compute Newton update
+!! references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18
       subroutine newton_step(n, c, K, y, sig, D, DIAG)
-      use gpr_util
+      use gpr_linalg
       implicit none
       integer, intent(in)           :: n
       double precision, intent(in)  :: c(n), K(n, n), sig(n), D(n, n), DIAG(n, n)
       double precision, intent(out) :: y(n)
-
+!
       double precision, allocatable :: CURR(:, :)
-
-      allocate(CURR(n, n), work(n))
-      allocate(ipiv(n))
+!
+      allocate(CURR(n, n))
 ! calculate the Newton update
       CURR = MATMUL(D, K) + DIAG
       call solve(n, CURR)
       y = MATMUL(MATMUL(K, CURR), MATMUL(D, y) + c - sig)
-
+!
       deallocate(CURR)
       return
       end subroutine
-
-! compute the Laplace approximation around the mode
+!! compute the Laplace approximation around the mode
       subroutine laplace_approximation(n, c, K, y, sig, D)
       implicit none
       integer, intent(in)           :: n

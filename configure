@@ -2183,10 +2183,10 @@ gpr_FLAGS=
 
 case "${FC}" in
     *gfortran*)
-      gpr_FLAGS="-std=f95 -Wall"
+      gpr_FLAGS="-std=f2008 -Wall"
       ;;
     ifort)
-      gpr_FLAGS="-fixed -fpp -fast"
+      gpr_FLAGS="-std08 -fpp -fast"
       ;;
     *)
       as_fn_error $? "Unsupported Fortran compiler" "$LINENO" 5

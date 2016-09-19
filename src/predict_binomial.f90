@@ -1,15 +1,23 @@
-!! Fortran routines for calculation of binomial class labels
-!!
-! compute the binomial class labels
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! Fortran routines for calculation of binomial class labels
+!!!
+!!! @author: Simon Dirmeier
+!!! @email: simon.dirmeier@gmx.de
+!!!
+
+!! compute the binomial class labels
       subroutine predict_binomial(na, ntrain, nnew, K, ctrain, sigtrain, xnew, trainidx, newidx, mnew, ps, pm, Kn)
-      use gpr_util
+! load modules
+      use gpr_approx
+      use gpr_sampler
+      use gpr_linalg
       implicit none
       integer, intent(in)           :: na, ntrain, nnew
       integer, intent(in)           :: trainidx(ntrain), newidx(nnew)
       double precision, intent(in)  :: ctrain(ntrain), K(na, na) 
       double precision, intent(in)   :: sigtrain(ntrain), xnew(nnew)
       double precision, intent(out) :: mnew(nnew), ps(nnew), pm(nnew), Kn(nnew, nnew)
-!
+! worker arrays
       double precision :: knn, me, pre, var, m, rn
       double precision, allocatable :: cm(:), Ktt(:, :), D(:, :), Knt(:), Cu(:, :)
       integer :: i, cidx
@@ -37,7 +45,7 @@
       end do
       mnew = MATMUL( K((ntrain+1):nnew, 1:ntrain), cm)
       Kn = K(newidx, newidx) / MATMUL(MATMUL(K((ntrain+1):nnew, 1:ntrain), Cu), K((ntrain+1):nnew, 1:ntrain))
-
+!
       deallocate(cm, Ktt, Knt, D, Cu)
       return
       end subroutine
