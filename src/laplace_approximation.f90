@@ -4,27 +4,22 @@
 ! compute Newton update
 ! references: Barber p406, Equation~19.5.19; Rasmussen p43, Equation~3.18
       subroutine newton_step(n, c, K, y, sig, D, DIAG)
+      use gpr_util
       implicit none
       integer, intent(in)           :: n
       double precision, intent(in)  :: c(n), K(n, n), sig(n), D(n, n), DIAG(n, n)
       double precision, intent(out) :: y(n)
 
-      double precision, allocatable :: CURR(:, :), work(:)
-      integer,          allocatable :: ipiv(:)
-      integer :: info
-! load Lapack routines for matrix inversion
-      external DGETRF
-      external DGETRI
+      double precision, allocatable :: CURR(:, :)
 
       allocate(CURR(n, n), work(n))
       allocate(ipiv(n))
 ! calculate the Newton update
       CURR = MATMUL(D, K) + DIAG
-      call DGETRF(n, n, CURR, n, ipiv, info)
-      call DGETRI(n, CURR, n, ipiv, work, n, info)
+      call solve(n, CURR)
       y = MATMUL(MATMUL(K, CURR), MATMUL(D, y) + c - sig)
 
-      deallocate(CURR, work, ipiv)
+      deallocate(CURR)
       return
       end subroutine
 
