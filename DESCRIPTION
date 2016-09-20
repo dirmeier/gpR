@@ -18,9 +18,11 @@ Suggests:
     lintr
 Imports:
     pracma,
-    methods
+    methods,
+    Rcpp
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
+SystemRequirements: C++11
 Collate:
     'classes.R'
     'approx.R'
@@ -35,3 +37,4 @@ Collate:
     'sampler.R'
     'transfer_functions.R'
     'zzz.R'
+LinkingTo: Rcpp, RcppEigen

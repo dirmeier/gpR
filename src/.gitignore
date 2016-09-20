@@ -3,3 +3,5 @@ Makevars
 *.so
 *.a
 *.mod
+*.dll
+.idea/*

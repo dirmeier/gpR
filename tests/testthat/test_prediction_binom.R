@@ -6,6 +6,7 @@ predict.r <- function(K, c.train, sig, x.new, train, test)
   c.mean <- c.train - sig
   Dinv <- diag(1 / (sig * (1 - sig)))
   pred.means <- pred.samples <- c()
+  Cu <- solve(cov.train.train + Dinv)
   for (i in seq(length(x.new)))
   {
     cov.new.train <- t(K[train, test[i]])
@@ -14,13 +15,13 @@ predict.r <- function(K, c.train, sig, x.new, train, test)
     var <- cov.new.new - cov.new.train %*%
       solve(cov.train.train + Dinv) %*% t(cov.new.train)
     me <- .logistic.normal.integral(m, var)
-    pre <- .sigmoid(.sample.gaussian(m, var))
+    rn <- .sample.gaussian(m, var)
+    pre <- .sigmoid(rn)
     pred.samples <- c(pred.samples , pre)
     pred.means   <- c(pred.means, me)
   }
   m.new <- (K[test, train] %*% c.mean)[,1]
-  cov.new.new <- K[test, test] - K[test, train] %*%
-    solve(cov.train.train + Dinv) %*% K[train, test]
+  cov.new.new <- K[test, test] - K[test, train] %*% Cu %*% K[train, test]
   list(m.new=m.new,
        cov.new.new=cov.new.new,
        pred.samples=pred.samples,
@@ -68,7 +69,6 @@ test_that("fortran binomial prediction", {
   test <- 1:nnew + ntrain
   res.r <- predict.r(K, c.train, sig, x.new, train, test)
   res.f <- predict.f(K, c.train, sig, x.new, train, test)
-  expect_equal(res.r$m.new, res.f$m.new, tolerance=.001)
-  expect_equal(res.r$pred.samples, res.f$pred.samples, tolerance=.5)
-  expect_equal(res.r$pred.means, res.f$pred.means, tolerance=.5)
+  expect_equal(res.r$m.new, res.f$m.new, tolerance=.01)
+  expect_equal(res.r$pred.means, res.f$pred.means, tolerance=.01)
 })

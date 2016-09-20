@@ -28,51 +28,14 @@ predict.binomial <- function(obj, ...)
   sig <- approx$log.transform
   # joint covariance matrix of x.train and x.new
   K <- approx$cov
-  cov.train.train <- K[train, train]
-  # compute log probability of the class mapping of c.train given
-  # the posterior mean
-  # (see references: Barber p406, Equation~19.5.24;
-  #                  Rasmussen p44, Equation~3.15 & Equation~3.21)
-  c.mean <- c.train - sig
-  # compute the inverse of the Hessian of the log-likelihood
-  Dinv <- diag(1 / (sig * (1 - sig)))
-  pred.means <- pred.samples <- base::c()
-  # make a prediction for all new input points
-  for (i in seq(length(x.new)))
-  {
-    # get the covariance of the training points and a new input
-    cov.new.train <- t(K[train, test[i]])
-    # get the variance of the new input point
-    cov.new.new <- K[test[i], test[i]]
-    # compute the posterior mean of the predictive distribution
-    # (see references: Barber p406, Equation~19.5.24;
-    #                  Rasmussen p44, Equation~3.21)
-    m <- cov.new.train %*% c.mean
-    # compute the posterior variance of the predictive distribution
-    # (see references: Barber p406, Equation~19.5.26;
-    #                  Rasmussen p44, Equation~3.24)
-    var <- cov.new.new - cov.new.train %*%
-      solve(cov.train.train + Dinv) %*% t(cov.new.train)
-    # compute the mean class probability mapping
-    # (see references: Barber p406, Equation~19.5.27;
-    #                  Rasmussen p44, Equation~3.25)
-    me <- .logistic.normal.integral(m, var)
-    # compute a sample from the posterior class mapping
-    pre <- .sigmoid(.sample.gaussian(m, var))
-    # store the predicted class mapping in a vector
-    pred.samples <- base::c(pred.samples , pre)
-    pred.means   <- base::c(pred.means, me)
-  }
-  m.new <- K[test, train] %*% c.mean
-  cov.new.new <- K[test, test] - K[test, train] %*%
-    solve(cov.train.train + Dinv) %*% K[train, test]
-  c.labels <- rep(0, length(pred.samples))
-  c.labels[pred.samples >= 0.5] <- 1
-  ret <- base::list(mean.c.predict=pred.means,
-                    c.predict=pred.samples,
+  res <- .predict.binomial(K, c.train, sig, x.new, train, test)
+  c.labels <- rep(0, length(res$pred.samples))
+  c.labels[res$pred.samples >= 0.5] <- 1
+  ret <- base::list(mean.c.predict=res$pred.means,
+                    c.predict=res$pred.samples,
                     c.labels = c.labels,
-                    cov=cov.new.new,
-                    mean=m.new)
+                    cov=res$cov.new.new,
+                    mean=res$m.new)
   ret$call <- match.call()
   ret
 }

@@ -1,0 +1,77 @@
+/**
+ * @author Simon Dirmeier
+ * @email simon.dirmeier@gmx.de
+ */
+
+// [[Rcpp::depends(RcppEigen)]]
+#include <RcppEigen.h>
+#include <vector>
+#include <cmath>
+
+//' Logistic normal integral approximation using the error-function
+//'
+//' @noRd
+//' @param m  mean
+//' @param var  variance
+//' @return  returns the logistic normal integral
+// [[Rcpp::export(name=".logistic.normal.integral.cpp")]]
+double lognint_(const double m, const double var)
+{
+    const double lam = sqrt(3.141592653589793238463) / 4;
+    const double e = .5 +
+                     .5 * erf(lam * m /
+                              std::sqrt(
+                                  1.0 + (2 * std::pow(lam, 2.0) * var)));
+    return e;
+}
+
+//' Predict the labels for a feature vector x.new
+//'
+//' @noRd
+//' @param p0  the staring distribution
+//' @param W  the column normalized adjacency matrix
+//' @param r  restart probability
+//' @return  returns the stationary distribution p_inf
+// [[Rcpp::export(name=".predict.binomial.cpp")]]
+Rcpp::List predict_binomial_(
+    const int na, const int ntrain, const int nnew,
+    const Eigen::MatrixXd &K,
+    const Eigen::VectorXd &ctrain, const Eigen::VectorXd &sigtrain,
+    const Eigen::VectorXd &xnew,
+    const Eigen::VectorXi &trainidx, const Eigen::VectorXi &newidx)
+{
+    //
+    Eigen::MatrixXd Ktt = K.block(0, 0, ntrain, ntrain);
+    Eigen::VectorXd cm = ctrain - sigtrain;
+    // TODO ERROR: 1 -
+    Eigen::VectorXd di = sigtrain * (sigtrain);
+    Eigen::MatrixXd D = di.asDiagonal();
+    Eigen::MatrixXd Cu = (Ktt + D).inverse();
+    //
+    Eigen::VectorXd ps(nnew);
+    Eigen::VectorXd pm(nnew);
+    for (int i = 0; i < nnew; ++i)
+    {
+        const int cidx = newidx(i);
+        Eigen::MatrixXd Knt = K.block(0, cidx, ntrain, cidx + 1);
+        const double knn = K(cidx, cidx);
+        const double m = (Knt * cm).sum();
+        const double var = knn - (Knt * Cu * Knt).sum();
+        const double me = lognint_(m, var);
+        const double rn = Rcpp::rnorm(1, m, var)[0];
+        const double pre = 1 / (1 + std::exp(-rn));
+        ps(i) = pre;
+        pm(i) = me;
+    }
+    const int nidst = ntrain;
+    Eigen::VectorXd mnew = K.block(nidst, 0, na, ntrain) * cm;
+    Eigen::MatrixXd Kn = K.block(nidst, nidst, na, na) -
+                         K.block(nidst, 0, na, ntrain) * Cu *
+                         K.block(0, nidst, ntrain, na);
+    return Rcpp::List::create(
+        Rcpp::Named("ps") = ps,
+        Rcpp::Named("pm") = pm,
+        Rcpp::Named("mnew") = mnew,
+        Rcpp::Named("Kn") = Kn);
+}
+
