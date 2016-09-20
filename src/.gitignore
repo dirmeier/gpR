@@ -2,3 +2,4 @@ Makevars
 *.o
 *.so
 *.a
+*.mod
