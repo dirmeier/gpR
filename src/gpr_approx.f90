@@ -16,7 +16,7 @@
       double precision, intent(in) :: m, var
       double precision, parameter :: PI = 3.1415926535897932
       double precision            :: lam
-      lam = sqrt(PI / 4)
+      lam = sqrt(PI) / 4
       ! approximation of logistic normal integral using the Gaussian error function
       e = DBLE(.5 + .5 * erf(lam * m / sqrt(1.0 + (2 * (lam ** 2.0) * var))))
       end function lognint

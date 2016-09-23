@@ -34,10 +34,10 @@
       cm = ctrain - sigtrain
       D = 0.0
 ! worker       
+      ! compute the inverse of the Hessian of the log-likelihood      
+      forall(i = 1:ntrain) D(i, i) =  1 / (sigtrain(i) * (1 - sigtrain(i)))
       Cu  = Ktt + D
       call solve(ntrain, Cu)
-! compute the inverse of the Hessian of the log-likelihood      
-      forall(i = 1:ntrain) D(i, i) = sigtrain(i) * (1 - sigtrain(i))
       do i = 1, nnew
           cidx = newidx(i)
 ! get the covariance of the training points and a new input          
@@ -58,7 +58,7 @@
           me  = lognint(m, var)
           rn = rnorm(m, var)
 ! compute a sample from the posterior class mapping          
-          pre =  1 / (1 + exp(-1 * rn ))
+          pre =  1 / (1 + exp(-rn))
           ps(i) = pre
           pm(i) = me
       end do
@@ -66,7 +66,7 @@
 ! mean of posterior       
       mnew = MATMUL(K(nnewidxst:na, 1:ntrain), cm)
 ! variance of posterior      
-      Kn = K(newidx, newidx) / MATMUL(MATMUL(K(nnewidxst:na, 1:ntrain), Cu), &
+      Kn = K(newidx, newidx) - MATMUL(MATMUL(K(nnewidxst:na, 1:ntrain), Cu), &
                                       K(1:ntrain, nnewidxst:na))
 !
       deallocate(cm, Ktt, Knt, D, Cu)
