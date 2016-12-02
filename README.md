@@ -1,6 +1,6 @@
 <h1 align="center"> gpR </h1>
 
-[![Build Status](https://travis-ci.org/dirmeier/gpR.svg?branch=master)](https://travis-ci.org/dirmeier/gpR.svg?branch=master)
+[![Build Status](https://travis-ci.org/dirmeier/gpR.svg?branch=master)](https://travis-ci.org/dirmeier/gpR)
 [![codecov](https://codecov.io/gh/dirmeier/gpR/branch/master/graph/badge.svg)](https://codecov.io/gh/dirmeier/gpR)
 
 
