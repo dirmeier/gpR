@@ -1,7 +1,8 @@
 <h1 align="center"> gpR </h1>
 
+[![Project Status](http://www.repostatus.org/badges/latest/suspended.svg)](http://www.repostatus.org/#suspended)
 [![Build Status](https://travis-ci.org/dirmeier/gpR.svg?branch=master)](https://travis-ci.org/dirmeier/gpR)
-  [![codecov](https://codecov.io/gh/dirmeier/gpR/branch/master/graph/badge.svg)](https://codecov.io/gh/dirmeier/gpR)
+[![codecov](https://codecov.io/gh/dirmeier/gpR/branch/master/graph/badge.svg)](https://codecov.io/gh/dirmeier/gpR)
 
 Gaussian processes for machine learning in R and FORTRAN.
 
